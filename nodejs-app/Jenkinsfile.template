@@ -92,18 +92,18 @@ pipeline {
       }
     }
     stage('Build and Push Image') {
-      agent any
       when {
         beforeAgent true
         branch 'master'
       }
       steps {
-        echo "TODO - build and push image"
-        unstash 'app'
+        dockerBuildPush(env.IMAGE_NAME, env.IMAGE_TAG) {
+          unstash 'app'
+        }
       }
       post {
         success {
-          stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
+          slackSend "${JOB_NAME} pipeline job is awaiting approval at: ${RUN_DISPLAY_URL}"
         }
       }
     }
