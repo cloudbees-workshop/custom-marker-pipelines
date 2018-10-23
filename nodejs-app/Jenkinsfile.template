@@ -3,6 +3,7 @@ pipeline {
   options {
   buildDiscarder(logRotator(numToKeepStr: '2'))
   skipDefaultCheckout true
+  preserveStashes(buildCount: 2)
   }
   post {
     aborted {
@@ -28,7 +29,7 @@ pipeline {
       }
       steps {
         echo "TODO - build and push image"
-        //unstash 'app'
+        unstash 'app'
       }
       post {
         success {
