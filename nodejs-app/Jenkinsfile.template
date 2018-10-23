@@ -12,6 +12,7 @@ pipeline {
   }
   stages {
     stage('Test') {
+      //agent { label 'nodejs-app' }
       agent {
   kubernetes {
     label 'nodejs-app-inline'
@@ -22,7 +23,7 @@ name: nodejs-app
 spec:
 containers:
 - name: nodejs
-image: node:10.10.1-alpine
+image: node:10.10.0-alpine
 command:
 - cat
 tty: true
@@ -50,12 +51,12 @@ tty: true
       }
       steps {
         echo "TODO - build and push image"
-        //unstash 'app'
+        unstash 'app'
       }
       post {
         success {
           slackSend "${JOB_NAME} pipeline job is awaiting approval at: ${RUN_DISPLAY_URL}"
-          //stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
+          stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
         }
       }
     }
