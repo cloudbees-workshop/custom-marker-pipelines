@@ -28,7 +28,11 @@ pipeline {
         branch 'master'
       }
       options {
-        timeout(time: 59, unit: 'SECONDS')
+        input {
+          message "Should we deploy?"
+          submitter "beatjay"
+          submitterParameter "APPROVER"
+        }
       }
       input {
         message "Should we continue?"
